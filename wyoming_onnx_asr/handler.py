@@ -51,6 +51,10 @@ class NemoAsrEventHandler(AsyncEventHandler):
             self._wav_dir.cleanup()
             self._wav_dir = None
 
+    def __del__(self) -> None:
+        """Ensure cleanup happens even if close() is not explicitly called."""
+        self.close()
+
     def __enter__(self) -> "NemoAsrEventHandler":
         return self
 
