@@ -42,13 +42,20 @@ class NemoAsrEventHandler(AsyncEventHandler):
         self._wav_path = os.path.join(self._wav_dir.name, "speech.wav")
         self._wav_file: Optional[wave.Wave_write] = None
 
-    def __del__(self) -> None:
+    def close(self) -> None:
         """Cleanup temporary resources."""
-        if hasattr(self, '_wav_file') and self._wav_file is not None:
+        if self._wav_file is not None:
             self._wav_file.close()
-        if hasattr(self, '_wav_dir'):
+            self._wav_file = None
+        if self._wav_dir is not None:
             self._wav_dir.cleanup()
+            self._wav_dir = None
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
     async def handle_event(self, event: Event) -> bool:
         if AudioChunk.is_type(event.type):
             chunk = AudioChunk.from_event(event)
