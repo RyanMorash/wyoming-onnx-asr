@@ -54,7 +54,12 @@ class NemoAsrEventHandler(AsyncEventHandler):
     def __enter__(self) -> "NemoAsrEventHandler":
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: Optional[type],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> None:
         self.close()
     async def handle_event(self, event: Event) -> bool:
         if AudioChunk.is_type(event.type):
