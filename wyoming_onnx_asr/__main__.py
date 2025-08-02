@@ -79,6 +79,8 @@ async def main() -> None:
 
     # Add multilingual model if specified
     if multi_model_name is not None:
+        # Convert tuple to list to satisfy type checker
+        multilingual_languages: list[str] = list(_LANGUAGE_CODES)
         asr_models.append(
             AsrModel(
                 name=multi_model_name,
@@ -88,7 +90,7 @@ async def main() -> None:
                     url="https://github.com/istupakov/onnx-asr",
                 ),
                 installed=True,
-                languages=_LANGUAGE_CODES,
+                languages=multilingual_languages,
                 version="0.1",
             )
         )

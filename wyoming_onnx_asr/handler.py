@@ -5,7 +5,7 @@ import logging
 import os
 import tempfile
 import wave
-from typing import Optional
+from typing import Any, Mapping, Optional
 
 import numpy as np
 import soundfile as sf
@@ -25,7 +25,7 @@ class NemoAsrEventHandler(AsyncEventHandler):
     def __init__(
         self,
         wyoming_info: Info,
-        models: dict[str, AsrAdapter],
+        models: Mapping[str, AsrAdapter[Any]],
         model_lock: asyncio.Lock,
         *args,
         initial_prompt: Optional[str] = None,
@@ -41,6 +41,13 @@ class NemoAsrEventHandler(AsyncEventHandler):
         self._wav_dir = tempfile.TemporaryDirectory()
         self._wav_path = os.path.join(self._wav_dir.name, "speech.wav")
         self._wav_file: Optional[wave.Wave_write] = None
+
+    def __del__(self) -> None:
+        """Cleanup temporary resources."""
+        if hasattr(self, '_wav_file') and self._wav_file is not None:
+            self._wav_file.close()
+        if hasattr(self, '_wav_dir'):
+            self._wav_dir.cleanup()
 
     async def handle_event(self, event: Event) -> bool:
         if AudioChunk.is_type(event.type):

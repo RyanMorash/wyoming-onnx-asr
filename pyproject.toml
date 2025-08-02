@@ -37,7 +37,7 @@ include = ["wyoming_onnx_asr"]
 exclude = ["tests"]
 
 [project.scripts]
-wyoming-nemo-asr = "wyoming_onnx_asr.__main__:run"
+wyoming-onnx-asr = "wyoming_onnx_asr.__main__:run"
 
 [build-system]
 requires = ["setuptools>=42", "wheel"]
