@@ -51,7 +51,7 @@ class NemoAsrEventHandler(AsyncEventHandler):
             self._wav_dir.cleanup()
             self._wav_dir = None
 
-    def __enter__(self):
+    def __enter__(self) -> "NemoAsrEventHandler":
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
