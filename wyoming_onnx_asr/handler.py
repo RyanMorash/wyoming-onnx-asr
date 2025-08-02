@@ -109,7 +109,7 @@ class NemoAsrEventHandler(AsyncEventHandler):
                         f"Starting transcription with model for language '{lang}'"
                     )
                     text = model.recognize(
-                        waveform, language=lang, sample_rate=sample_rate
+                        waveform.astype(np.float32), sample_rate=sample_rate, language=lang
                     )
                     _LOGGER.info(
                         f"Transcription completed successfully for language '{lang}'"
